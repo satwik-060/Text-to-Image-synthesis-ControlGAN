@@ -74,6 +74,7 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
 
         # words_emb: batch_size x nef x seq_len
         # sent_emb: batch_size x nef
+        # print(captions)
         words_emb, sent_emb = rnn_model(captions, cap_lens, hidden)
 
         w_loss0, w_loss1, attn_maps = words_loss(words_features, words_emb, labels,
@@ -122,7 +123,7 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
             img_set, _ = \
                 build_super_images(imgs[-1].cpu(), captions,
                                    ixtoword, attn_maps, att_sze)
-            print(img_set)
+            # print(img_set)
             if img_set is not None:
                 im = Image.fromarray(img_set)
                 fullpath = '%s/attention_maps%d.png' % (image_dir, step)
