@@ -99,11 +99,11 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
         if step > 0 and step % UPDATE_INTERVAL == 0:
             count = epoch * len(dataloader) + step
 
-            s_cur_loss0 = s_total_loss0[0] / UPDATE_INTERVAL
-            s_cur_loss1 = s_total_loss1[0] / UPDATE_INTERVAL
+            s_cur_loss0 = s_total_loss0 / UPDATE_INTERVAL
+            s_cur_loss1 = s_total_loss1 / UPDATE_INTERVAL
 
-            w_cur_loss0 = w_total_loss0[0] / UPDATE_INTERVAL
-            w_cur_loss1 = w_total_loss1[0] / UPDATE_INTERVAL
+            w_cur_loss0 = w_total_loss0 / UPDATE_INTERVAL
+            w_cur_loss1 = w_total_loss1 / UPDATE_INTERVAL
 
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d}/{:5d} batches | ms/batch {:5.2f} | '
@@ -122,6 +122,7 @@ def train(dataloader, cnn_model, rnn_model, batch_size,
             img_set, _ = \
                 build_super_images(imgs[-1].cpu(), captions,
                                    ixtoword, attn_maps, att_sze)
+            print(img_set)
             if img_set is not None:
                 im = Image.fromarray(img_set)
                 fullpath = '%s/attention_maps%d.png' % (image_dir, step)
@@ -154,8 +155,8 @@ def evaluate(dataloader, cnn_model, rnn_model, batch_size):
         if step == 50:
             break
 
-    s_cur_loss = s_total_loss[0] / step
-    w_cur_loss = w_total_loss[0] / step
+    s_cur_loss = s_total_loss / step
+    w_cur_loss = w_total_loss / step
 
     return s_cur_loss, w_cur_loss
 
@@ -235,6 +236,7 @@ if __name__ == "__main__":
         transforms.Resize(int(imsize * 76 / 64)),
         transforms.RandomCrop(imsize),
         transforms.RandomHorizontalFlip()])
+    
     dataset = TextDataset(cfg.DATA_DIR, 'train',
                           base_size=cfg.TREE.BASE_SIZE,
                           transform=image_transform)

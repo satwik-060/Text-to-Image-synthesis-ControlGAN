@@ -245,7 +245,7 @@ class condGANTrainer(object):
             step = 0
             while step < self.num_batches:
 
-                data = data_iter.next()
+                data = next(data_iter)
                 imgs, captions, cap_lens, class_ids, keys, wrong_caps, \
                                 wrong_caps_len, wrong_cls_id = prepare_data(data)
 
@@ -425,8 +425,10 @@ class condGANTrainer(object):
             text_encoder.eval()
 
             if cfg.GAN.B_DCGAN:
+                # print("**********B_DCGAN**********")
                 netG = G_DCGAN()
             else:
+                # print('*********GNET***********')
                 netG = G_NET()
             s_tmp = cfg.TRAIN.NET_G[:cfg.TRAIN.NET_G.rfind('.pth')]
             model_dir = cfg.TRAIN.NET_G

@@ -91,7 +91,7 @@ def get_imgs(img_path, imsize, bbox=None,
     else:
         for i in range(cfg.TREE.BRANCH_NUM):
             if i < (cfg.TREE.BRANCH_NUM - 1):
-                re_img = transforms.Scale(imsize[i])(img)
+                re_img = transforms.Resize(imsize[i])(img)
             else:
                 re_img = img
             ret.append(normalize(re_img))

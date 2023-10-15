@@ -19,8 +19,7 @@ class VGGNet(nn.Module):
         model.load_state_dict(model_zoo.load_url(url))
 
         for param in model.parameters():
-        	param.resquires_grad = False
-
+            param.resquires_grad = False
         print('Load pretrained model from ', url)
         self.vgg = model.features
         

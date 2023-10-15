@@ -4,6 +4,7 @@ from miscc.config import cfg, cfg_from_file
 from datasets import TextDataset
 from trainer import condGANTrainer as trainer
 
+import pickle
 import os
 import sys
 import time
@@ -120,7 +121,7 @@ if __name__ == "__main__":
     # Get data loader
     imsize = cfg.TREE.BASE_SIZE * (2 ** (cfg.TREE.BRANCH_NUM - 1))
     image_transform = transforms.Compose([
-        transforms.Scale(int(imsize * 76 / 64)),
+        transforms.Resize(int(imsize * 76 / 64)),
         transforms.RandomCrop(imsize),
         transforms.RandomHorizontalFlip()])
     dataset = TextDataset(cfg.DATA_DIR, split_dir,
@@ -133,7 +134,18 @@ if __name__ == "__main__":
 
     # Define models and go to train/evaluate
     algo = trainer(output_dir, dataloader, dataset.n_words, dataset.ixtoword)
-
+    
+    print(dataset.wordtoix)
+    file_path = "vocabulary.pkl"
+    
+    vocabulary = {
+        'wordtoix' : dataset.wordtoix,
+        'ixtoword' : dataset.ixtoword
+    }
+    
+    with open(file_path, "wb") as file:
+        pickle.dump(vocabulary,file)
+    
     start_t = time.time()
     if cfg.TRAIN.FLAG:
         algo.train()
